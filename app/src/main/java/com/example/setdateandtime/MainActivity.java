@@ -1,66 +1,82 @@
+
 package com.example.setdateandtime;
 
-import androidx.annotation.RequiresApi;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.TimePicker;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.widget.ImageView;
+//import com.google.mlkit.vision.common.InputImage;
+//import com.google.mlkit.vision.text.TextRecognition;
+//import com.google.mlkit.vision.text.TextRecognizer;
+//import com.google.mlkit.vision.text.Text;
+//import com.google.android.gms.tasks.OnFailureListener;
+//import com.google.android.gms.tasks.OnSuccessListener;
+//import com.google.android.gms.tasks.Task;
+
 public class MainActivity extends AppCompatActivity {
-    TimePicker time;
-    DatePicker date;
-
     Button b;
-
+    TextView currentTimeTextView;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+     ImageView capturedImageView;
+     String uriString = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        time = findViewById(R.id.time);
-        date = findViewById(R.id.date);
-        time.setEnabled(true);
-        date.setEnabled(true);
-        time.setIs24HourView(false);
-        date.setSpinnersShown(true);
 
-        String currentdate = String.valueOf(date.getDayOfMonth());
-        String currentmonth = String.valueOf(date.getMonth() + 1);
-        String currentyear = String.valueOf(date.getYear());
-        String currenthr = String.valueOf(time.getCurrentHour());
-        String currentmin = String.valueOf(time.getCurrentMinute());
-        Toast.makeText(this, "" + currenthr + ":" + currentmin + "..." + currentdate + "/" + currentmonth + "/" + currentyear, Toast.LENGTH_LONG).show();
-        b = findViewById(R.id.button);
-        b.setOnClickListener(new View.OnClickListener() {
+        Button captureButton = findViewById(R.id.capture_button);
+        Button extractButton = findViewById(R.id.extractText);
+        capturedImageView = findViewById(R.id.captured_image_view);
 
-            @RequiresApi(api = Build.VERSION_CODES.M)
+        captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                String hrs = String.valueOf(time.getHour());
-                String mins = String.valueOf(time.getMinute());
-
-                String setdate = String.valueOf(date.getDayOfMonth());
-                String setmonth = String.valueOf(date.getMonth() + 1);
-                String setyear = String.valueOf(date.getYear());
-                // te.setText(hrs+":"+mins+"..."+setdate+"/"+setmonth+"/"+setyear);
-                if (hrs == null || mins == null || setdate == null || setdate == null || setyear == null) {
-                    Toast.makeText(MainActivity.this, "PLEASE SELECT CORRECT DATE AND TIME", Toast.LENGTH_LONG);
-                } else {
-
-                    Intent i = new Intent(MainActivity.this, time1.class);
-                    i.putExtra("Date", setdate +"/"+ setmonth +"/"+ setyear);
-                    i.putExtra("Time", hrs +":"+ mins);
-
-                    startActivity(i);
-                }
-
+//                dispatchTakePictureIntent();
+                mGetContent.launch("image/*");
             }
         });
+        extractButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                dispatchTakePictureIntent();
+                Intent intent = new Intent(MainActivity.this, ResultAcitivity.class);
+                intent.putExtra("uri", uriString);
+                startActivity(intent);
+            }
+        });
+    }
+
+    ActivityResultLauncher<String> mGetContent = registerForActivityResult(
+            new ActivityResultContracts.GetContent(),
+            new ActivityResultCallback<Uri>() {
+                @Override
+                public void onActivityResult(Uri uri) {
+                    capturedImageView.setImageURI(uri);
+                    uriString = uri.toString();
+                }
+            });
+
+    // Helper method to get the current system time in a readable format
+    private String getCurrentSystemTime() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        return sdf.format(calendar.getTime());
     }
 }

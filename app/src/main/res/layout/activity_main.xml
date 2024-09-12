@@ -6,41 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TimePicker
-        android:id="@+id/time"
-        android:layout_width="334dp"
-        android:layout_height="198dp"
-        android:timePickerMode="spinner"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.03" />
-
-    <DatePicker
-        android:id="@+id/date"
-        android:layout_width="363dp"
-        android:layout_height="408dp"
-        android:datePickerMode="calendar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.666"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.724" />
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SET TIME"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/capture_button"
+        android:layout_width="245dp"
+        android:layout_height="50dp"
+        android:text="Capture Image"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.976" />
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/captured_image_view"
+        android:layout_width="336dp"
+        android:layout_height="202dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/capture_button" />
+
+    <Button
+        android:id="@+id/extractText"
+        android:layout_width="247dp"
+        android:layout_height="52dp"
+        android:text="extractText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/captured_image_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
